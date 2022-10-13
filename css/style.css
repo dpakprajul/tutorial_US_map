@@ -1,0 +1,8 @@
+#base { 
+    position:absolute;
+    left:100px;
+    right: 100px;
+    height: 100%;
+    background-color: aliceblue;
+    overflow:hidden,
+ }
