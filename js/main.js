@@ -1,15 +1,25 @@
 window.onload = function () {
-    var southWest = L.latLng(37, -96.3), // crea la última esquina SW y NE del área visible
-        northEast = L.latLng(40.8, -90.3),
-        bounds = L.latLngBounds(southWest, northEast); // creo una variable que incluya las dos esquinas
+  var southWest = L.latLng(37, -96.3),
+  northEast = L.latLng(40.8, -90.3),
+  bounds = L.latLngBounds(southWest, northEast);
 
-    //initialize the map
-    var map = L.map('base', { center: [39, -93.3], minZoom: 7, maxZoom: 13, maxBounds: bounds, zoom: 8 });
-    //var map = L.map('base').setView([39, -93.3], 8);
-    //add the basemap
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
+//initialize map
+var map = L.map("base", {
+  center: [39.0, -93.3],
+  maxBounds: bounds,
+  minZoom: 7,
+  maxZoom: 13,
+  zoom: 8,
+});
+
+//basemap definition
+L.tileLayer("http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png", {
+  attribution:
+    '&copy; <a href="http://osm.org/copyright" title="OpenStreetMap" target="_blank">OpenStreetMap</a> contributors | <a href="http://cartodb.com/attributions" title="CartoDB" target="_blank">CartoDB</a>',
+  subdomains: ["a", "b", "c", "d", "e", "f"],
+}).addTo(map); //add to map
+
+L.control.scale().addTo(map);
 
     function getColor(d) {
         if (d <= 3) { return '#ccffbb' }
@@ -103,11 +113,15 @@ window.onload = function () {
     }
 
 
-    // var b = L.geoJson(county2, {
-    //     pointToLayer: function (feature, latlng) {
-    //         return L.circle(latlng, Math.random() * 10000 + 2000, style(feature));
-    //     },
-    //     onEachFeature: onEachFeature,
+    var b = L.geoJson(county2, {
+        pointToLayer: function (feature, latlng) {
+            return L.circle(latlng, Math.random() * 10000 + 2000, style(feature));
+        },
+        onEachFeature: onEachFeature,
+        style: style,
+    })
+
+
 
 
 function style1(feature) {
@@ -124,29 +138,59 @@ function style1(feature) {
 
     // }).addTo(map);
 
-    var c = L.geoJson(county2, {
-        pointToLayer: function (feature, latlng) {
-            var circle = new L.Circle(latlng, getSize1(), style1(feature)).addTo(map);
-            var rectangle = new L.Rectangle(circle.getBounds(), style2(feature)).addTo(map);
-        }
-    }).addTo(map);
+    // var c = L.geoJson(county2, {
+    //     pointToLayer: function (feature, latlng) {
+    //         var circle = new L.Circle(latlng, getSize1(), style1(feature)).addTo(map);
+    //         var rectangle = new L.Rectangle(circle.getBounds(), style2(feature)).addTo(map);
+    //     }
+    // }).addTo(map);
 
     //get the current zoom level
     var zoom = map.getZoom();
 
     map.on('zoomend', function () {
         if (map.getZoom() > 8) {
-            c.addTo(map);
-            a.removeFrom(map);
+            b.addTo(map);
+            b.removeLayer(map);
         } else if (map.getZoom() < 8) {
             a.addTo(map);
-            c.removeFrom(map);
+            b.removeLayer(map);
         } else {
-            c.addTo(map);
+           
             a.addTo(map);
+            b.addTo(map);
+
             
         }
     });
 
-}
+    $(function() {
+        $("#slider").slider({
+          value: 2004,
+          min: 2004,
+          max: 2014,
+          step: 1,
+          slide: function(event, ui) {
+            $("#amount").val(ui.value -1 + "-" + ui.value);
+          },
+        })
+        .each(function() {
+          var opt = $(this).data().uiSlider.options;
+          var vals = opt.max - opt.min;
+          for (var i = 0; i <= vals-1; i++) {
+            var el = $('<label>' + (i + opt.min) + '</label>').css('left', (i/vals*100) + '%');
+            $("#slider").append(el);
+          }
+        });
+        $("amount").val($("#slider").slider("value")-1 + "-" + $("#slider").slider("value"));
+      });
+
+      //slider handler for time change
+      $("#slider").on("slidechange", function(event, ui) {
+        year = String(ui.value).substring(2);
+      });
+    
+      $("#slide").css("display", "initial");
+      $("#cover").css("display", "none");
+};
 
