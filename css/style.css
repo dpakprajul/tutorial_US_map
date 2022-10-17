@@ -42,3 +42,19 @@ html, body{
 	border: 1px solid 63875e;
 }
 
+.dropdown{
+	position: absolute;
+	right: 20px;
+	bottom: 20px;
+	width: 35%;
+	top: 20px;
+	z-index: 2;
+	background-color: #f6f6f6;
+	border: 1px solid 63875e;
+}
+
+#maptitle{
+	font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+	font-size: 20pt;
+	font-weight: bold;
+}

@@ -28,6 +28,18 @@ window.onload = function () {
   var previousZoom = 8;
   var currentZoom = 8;
 
+  $(function(){
+    $("#var2").selectmenu({
+      change: function (event, ui) {
+        sch = "stuSch" + $("#var2").val();
+
+        layerHandler();
+      },
+    })
+  });
+
+
+  $("#admin").val("County Level");
   function getColor(d) {
     if (d <= 3) {
       return "#ccffbb";
@@ -141,7 +153,7 @@ window.onload = function () {
   }
   var a = L.geoJson(county, {
     style: style,
-  });
+  }).addTo(map);
 
   function highlightFeature(e) {
     var layer = e.target;
@@ -173,6 +185,10 @@ window.onload = function () {
       return L.circle(latlng, Math.random() * 10000 + 2000, style(feature));
     },
     onEachFeature: onEachFeature,
+    style: style,
+  });
+
+  var c = L.geoJson(district, {
     style: style,
   });
 
@@ -226,7 +242,8 @@ window.onload = function () {
     map.removeLayer(b);
 
     schFill = circle + year;
-    sch = "stuSch" + year;
+    //sch = "stuSch" + year;
+
 
     f = L.geoJson(county2, {
       pointToLayer: function (feature, latlng) {
@@ -241,14 +258,20 @@ window.onload = function () {
 
   map.on("zoomend", function () {
     if (map.getZoom() > 8) {
-      b.addTo(map);
-      b.removeLayer(map);
+      
+      map.removeLayer(a);
+      map.removeLayer(b);
+      $("#admin").val("District Level");
+      c.addTo(map);
     } else if (map.getZoom() < 8) {
       a.addTo(map);
-      b.removeLayer(map);
+      map.removeLayer(b);
+      $("#admin").val("County Level");
     } else {
       a.addTo(map);
       b.addTo(map);
+      $("#admin").val("County Level");
+      
     }
   });
 

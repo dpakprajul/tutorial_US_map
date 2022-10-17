@@ -25,7 +25,30 @@
     <title>Document</title>
 </head>
 <body>
-    <div id="base"></div>
+    <div id="base">
+      <div class="dropdown">
+        <p id="maptitle">Map of USA <br/>
+        <input type="text" id="admin" readonly />
+        </p>
+
+        <p id="subtitle">Status of Schools between 2004 and 2014</p>
+        <div id="work">
+          <select name="var2" id="var2">
+            <option value="05" selected="selected">Population Density</option>
+            <option value="06">Population</option>
+            <option value="07">Median Income</option>
+            <option value="08">Poverty Rate</option>
+            <option value="09">Unemployment Rate</option>
+            <option value="10">Median Age</option>
+            <option value="11">Percent of Population with Bachelor's Degree or Higher</option>
+            <option value="12">Percent of Population with High School Diploma or Higher</option>
+            <option value="13">Percent of Population with Less than High School Diploma</option>
+            <option value="14">Percent of Population with Less than Bachelor's Degree</option>
+
+          </select>
+        </div>
+      </div>
+    </div>
     <div class="slider" id="slide">
       <p id="textbar">
         <label style="border: 0; background-color: #f30808; color: #593b35; font-weight: bold; text-align: center;"
@@ -48,5 +71,6 @@
 <script src="js/county2.js"></script>
 <script src="js/district2.js"></script>
 <script src="js/breaks.js"></script>
+<script src="js/district.js"></script>
 
 </html>
