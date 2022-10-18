@@ -38,8 +38,49 @@ window.onload = function () {
     })
   });
 
+  $(function(){
+    $("#var1").selectmenu({
+      change: function (event, ui) {
+        
+
+        layerHandler();
+      },
+    })
+  });
 
   $("#admin").val("County Level");
+
+  //create a list of five fruits
+  var Ttext = ["Apple", "Banana", "Orange", "Mango", "Pineapple"];
+  //create a list of first letter of the five fruits
+  var Tmenu = ["A", "B", "O", "M", "P"];
+
+  //create a list of five animal
+  var Ttext2 = ["Dog", "Cat", "Cow", "Horse", "Pig"];
+  //create a list of first letter of the five animal
+  var Tmenu2 = ["D", "C", "C", "H", "P"];
+  
+  //create a list of five birds
+  var Ttext3 = ["Eagle", "Owl", "Parrot", "Pigeon", "Sparrow"];
+  //create a list of first letter of the five birds
+  var Tmenu3 = ["E", "O", "P", "P", "S"];
+
+  function menuHandler(list, text) {
+    $("#var1 option").each(function(index, option) {
+      $(option).remove();
+    });
+    var options = [];
+    options.push("<option value='A' selected = 'selected'>Select</option>");
+    for (var i = 0; i < list.length; i++) {
+      options.push("<option value='" + list[i] + "'>" + text[i] + "</option>");
+    }
+    $("#var1").append(options.join("")).selectmenu().selectmenu('refresh', true);
+  }
+
+
+
+
+    menuHandler(Tmenu, Ttext);
   function getColor(d) {
     if (d <= 3) {
       return "#ccffbb";
@@ -247,7 +288,7 @@ window.onload = function () {
 
     f = L.geoJson(county2, {
       pointToLayer: function (feature, latlng) {
-        return L.circle(latlng, feature.properties[sch]*30, Cstyle(feature));
+        return L.circle(latlng, getSize1(feature.properties.D01), Cstyle(feature));
       },
       onEachFeature: onEachFeature,
     });
@@ -258,20 +299,23 @@ window.onload = function () {
 
   map.on("zoomend", function () {
     if (map.getZoom() > 8) {
+    menuHandler(Tmenu2, Ttext2);
       
       map.removeLayer(a);
       map.removeLayer(b);
       $("#admin").val("District Level");
       c.addTo(map);
     } else if (map.getZoom() < 8) {
+      menuHandler(Tmenu3, Ttext3);
       a.addTo(map);
       map.removeLayer(b);
       $("#admin").val("County Level");
+      
     } else {
+      menuHandler(Tmenu, Ttext);
       a.addTo(map);
       b.addTo(map);
       $("#admin").val("County Level");
-      
     }
   });
 
