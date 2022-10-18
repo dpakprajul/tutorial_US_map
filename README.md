@@ -6,3 +6,5 @@
 ## adding a slider to visualize result year wise
 ### ![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/38970123/196031814-b932f3ab-6e9a-4422-8549-2d954b02645c.gif)
 
+## adding dropdown and visualize data on select menu
+### ![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/38970123/196201688-ee36bfec-3e47-4e46-a848-bb24e908ad46.gif)
