@@ -156,7 +156,7 @@ window.onload = function () {
     return Math.random() * 100;
   }
   function getSize1() {
-    return Math.random() * 10000;
+    return Math.random() * 1000;
   }
 
   function style(feature) {
@@ -192,10 +192,12 @@ window.onload = function () {
       fillOpacity: 1,
     };
   }
-  var a = L.geoJson(county, {
-    style: style,
-  }).addTo(map);
+   var a = L.geoJson(county, {
+     style: style,
+   }).addTo(map);
 
+   
+  
   function highlightFeature(e) {
     var layer = e.target;
     layer.setStyle({
@@ -221,9 +223,24 @@ window.onload = function () {
     );
   }
 
+  
+  function onEachFeature1(feature, layer) {
+    layer.on({
+      mouseover: highlightFeature,
+    });
+
+    // create popup
+    layer.bindPopup(
+      "<strong> County Name: </strong>" +
+        feature.properties.NAME10 +
+        "<br />" +
+        "<strong> Population: </strong>" +
+        getSize(feature.properties.D02)
+    );
+  }
   var b = L.geoJson(county2, {
     pointToLayer: function (feature, latlng) {
-      return L.circle(latlng, Math.random() * 10000 + 2000, style(feature));
+      return L.circle(latlng, getSize1(feature.properties.D01), Cstyle(feature));
     },
     onEachFeature: onEachFeature,
     style: style,
@@ -232,6 +249,21 @@ window.onload = function () {
   var c = L.geoJson(district, {
     style: style,
   });
+
+  var markers = L.markerClusterGroup();
+ 
+
+
+
+
+var z = L.geoJson(district2, {
+    pointToLayer: function (feature, latlng) {
+      return markers.addLayer(L.circle(latlng, getSize1(feature.properties.D01), Cstyle(feature)));
+    },
+    onEachFeature: onEachFeature1,
+    style: style,
+  }).addTo(map);
+
 
   function style1(feature) {
     return {
