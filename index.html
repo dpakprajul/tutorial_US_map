@@ -5,15 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
-  />
-    <link rel="stylesheet" href="dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="dist/MarkerCluster.Default.css" />
-
+      rel="stylesheet"
+      type="text/css"
+      href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css"
+    />
    
     <!-- Make sure you put this AFTER Leaflet's CSS -->
-    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+    <script
+    type="text/javascript"
+    src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js?2"
+  ></script>
  <link
  rel="stylesheet"
  href="http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"
@@ -47,6 +48,11 @@
           </select>
         </div>
         <br />
+        <input type="file" id="canvas" name="file" />
+        <br />
+        <div id="table"></div>
+        <br />
+        <button id="export">Export</button>
         <div id="try"><select name="var1" id="var1"></select></div>
       </div>
     </div>
@@ -59,10 +65,15 @@
       </p>
       <div class="bar">
         <div class="slidebar" id="slider"></div>
+        
+        
+      
+       
+
       </div>
     </div>
    
-
+   
 </body>
 
 
@@ -73,9 +84,5 @@
 <script src="js/district2.js"></script>
 <script src="js/breaks.js"></script>
 <script src="js/district.js"></script>
-<script src="js/random.js"></script>
-
-<script src="dist/leaflet.markercluster.js"></script>
-
 
 </html>

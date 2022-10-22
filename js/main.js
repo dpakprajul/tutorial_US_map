@@ -1,13 +1,13 @@
 window.onload = function () {
   var southWest = L.latLng(37, -96.3),
-    northEast = L.latLng(40.8, -90.3),
-    bounds = L.latLngBounds(southWest, northEast);
+    northEast = L.latLng(40.8, -90.3);
+    //bounds = L.latLngBounds(southWest, northEast);
 
   //initialize map
   var map = L.map("base", {
     center: [39.0, -93.3],
-    maxBounds: bounds,
-    minZoom: 7,
+    
+    minZoom: 2,
     maxZoom: 13,
     zoom: 8,
   });
@@ -156,7 +156,7 @@ window.onload = function () {
     return Math.random() * 100;
   }
   function getSize1() {
-    return Math.random() * 1000;
+    return Math.random() * 10000;
   }
 
   function style(feature) {
@@ -223,21 +223,83 @@ window.onload = function () {
     );
   }
 
-  
   function onEachFeature1(feature, layer) {
-    layer.on({
-      mouseover: highlightFeature,
-    });
-
+   
     // create popup
     layer.bindPopup(
       "<strong> County Name: </strong>" +
-        feature.properties.NAME10 +
+        feature.properties.NAME +
         "<br />" +
         "<strong> Population: </strong>" +
         getSize(feature.properties.D02)
     );
+    //layer on click add the data from that county to the table
+    layer.on("click", function (e) {
+      var layer = e.target;
+      var county = layer.feature.properties.NAME;
+      var population = layer.feature.properties.CENSUSAREA;
+      //add the data to the table
+      $("#table").append(
+        "<tr><td>" +
+          county +
+          "</td><td>" +
+          population +
+          "</td></tr>"
+      );
+      //add the data to the table and export it to csv
+    });
+   
+    //make a geojson layer of the clicked county and save it
+    layer.on("click", function (e) {
+      var layer = e.target;
+      var county = layer.feature.properties.NAME;
+      var population = layer.feature.properties.CENSUSAREA;
+      //add the data to the table
+      $("#table").append(
+        "<tr><td>" +
+          county +
+          "</td><td>" +
+          population +
+          "</td></tr>"
+      );
+      //add the data to the table and export it to csv
+
+      //download geojson  
+
+      
+
+      var geojson = L.geoJson(layer.feature, {
+        onEachFeature: onEachFeature,
+      });
+      geojson.addTo(map);
+      geojson.toGeoJSON();
+      //var data = geojson.toGeoJSON();
+      $("#export").click(function () {
+        var data = JSON.stringify(layer.toGeoJSON());
+        var blob = new Blob([data], { type: "text/plain;charset=utf-8" });
+        saveAs(blob, "county.geojson");
+      });
+      //define saveAs function
+      function saveAs(blob, fileName) {
+        var link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.download = fileName;
+        link.click();
+      }
+      
+
+     
+
+    });
+  
+
+
+
+
+
   }
+
+
   var b = L.geoJson(county2, {
     pointToLayer: function (feature, latlng) {
       return L.circle(latlng, getSize1(feature.properties.D01), Cstyle(feature));
@@ -250,21 +312,8 @@ window.onload = function () {
     style: style,
   });
 
-  var markers = L.markerClusterGroup();
- 
 
-
-
-
-var z = L.geoJson(district2, {
-    pointToLayer: function (feature, latlng) {
-      return markers.addLayer(L.circle(latlng, getSize1(feature.properties.D01), Cstyle(feature)));
-    },
-    onEachFeature: onEachFeature1,
-    style: style,
-  }).addTo(map);
-
-
+  
   function style1(feature) {
     return {
       fillColor: getColor(getSize(feature.properties.D01)),
@@ -386,4 +435,31 @@ var z = L.geoJson(district2, {
   
   $("#slide").css("display", "initial");
   $("#cover").css("display", "none");
+
+
+  //upload a file from the user's computer and add it to the map
+  $("#canvas").on("change", function (e) {
+    var file = e.target.files[0];
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      var contents = e.target.result;
+      var geojson = JSON.parse(contents);
+      L.geoJson(geojson, {
+        style: style,
+        onEachFeature: onEachFeature1,
+      },
+      ).addTo(map);
+    };
+    reader.readAsText(file);
+  });
+
+
+
+
+ 
+  
+
+
 };
+
+
