@@ -58,3 +58,16 @@ html, body{
 	font-size: 20pt;
 	font-weight: bold;
 }
+
+#try{
+	float: right;
+	margin-right: 40px;
+	width: 53%;
+}
+
+#legend{
+	margin-left: 25px;
+	margin-top: 10px;
+	margin-bottom: 5px;
+	width: 90%;
+}
