@@ -41,15 +41,16 @@ window.onload = function () {
   $(function(){
     $("#var1").selectmenu({
       change: function (event, ui) {
-        selected = $("#var1").val(); //get selected value
         layerHandler();
-        $("#leg7").val(
-          Math.random()*100 + "%"
-        );
         $("#leg6").val(
-          Math.random()*100 + "%"
+          Math.random()*100+ "%"
         );
-
+        $("#leg7").val(
+          Math.random()*100+ "%"
+        );
+        $("#leg8").val(
+          Math.random()*100+ "%"
+        );
       },
     })
   });
@@ -426,8 +427,6 @@ window.onload = function () {
   $("#cover").css("display", "none");
 
 
-
-
 //upload a file from the user's computer and add it to the map
   $("#upload").on("change", function (e) {
     var file = e.target.files[0];
@@ -521,6 +520,51 @@ window.onload = function () {
     },
 };
   L.control.polylineMeasure(options).addTo(map);
+
+  map.on('measurefinish', function(evt) {
+    writeResults(evt);
+  });
+
+  function writeResults(results) {
+    document.getElementById('info').innerHTML = JSON.stringify(
+      {
+        area: results.area,
+        areaDisplay: results.areaDisplay,
+        lastCoord: results.lastCoord,
+        length: results.length,
+        lengthDisplay: results.lengthDisplay,
+        pointCount: results.pointCount,
+        points: results.points
+      },
+      null,
+      2
+    );
+    //save the results to a file
+    var data = JSON.stringify({
+      area: results.area,
+      areaDisplay: results.areaDisplay,
+      lastCoord: results.lastCoord,
+      length: results.length,
+      lengthDisplay: results.lengthDisplay,
+      pointCount: results.pointCount,
+      points: results.points
+    },
+    null,
+    2);
+    var blob = new Blob([data], { type: "text/plain;charset=utf-8" });
+    saveAs(blob, "results.geojson");
+
+    function saveAs(blob, fileName) {
+      var link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = fileName;
+      link.click();
+    }
+
+  }
+
+
+
 
 
 };
