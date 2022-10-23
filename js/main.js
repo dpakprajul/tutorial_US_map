@@ -552,7 +552,7 @@ window.onload = function () {
     null,
     2);
     var blob = new Blob([data], { type: "text/plain;charset=utf-8" });
-    saveAs(blob, "results.geojson");
+    saveAs(blob, "results.json");
 
     function saveAs(blob, fileName) {
       var link = document.createElement("a");
