@@ -1,82 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css"
-    />
-   
-    <!-- Make sure you put this AFTER Leaflet's CSS -->
-    <script
-    type="text/javascript"
-    src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js?2"
-  ></script>
- <link
- rel="stylesheet"
- href="http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"
-/>
-<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-<link rel="stylesheet" href="css/style.css">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+
+  <!-- Make sure you put this AFTER Leaflet's CSS -->
+  <script type="text/javascript" src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js?2"></script>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css" />
+  <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+  <link rel="stylesheet" href="css/style.css" />
+  <title>Document</title>
 </head>
+
 <body>
-    <div id="base">
-      <div class="dropdown">
-        <p id="maptitle">Map of USA <br/>
+  <div id="base">
+    <div class="dropdown">
+      <p id="maptitle">
+        Map of USA <br />
         <input type="text" id="admin" readonly />
-        </p>
-
-        <p id="subtitle">Status of Schools between 2004 and 2014</p>
-        <div id="work">
-          <select name="var2" id="var2">
-            <option value="05" selected="selected">Population Density</option>
-            <option value="06">Population</option>
-            <option value="07">Median Income</option>
-            <option value="08">Poverty Rate</option>
-            <option value="09">Unemployment Rate</option>
-            <option value="10">Median Age</option>
-            <option value="11">Percent of Population with Bachelor's Degree or Higher</option>
-            <option value="12">Percent of Population with High School Diploma or Higher</option>
-            <option value="13">Percent of Population with Less than High School Diploma</option>
-            <option value="14">Percent of Population with Less than Bachelor's Degree</option>
-
-          </select>
-        </div>
-        <br />
-        <input type="file" id="canvas" name="file" />
-        <br />
-        <div id="table"></div>
-        <br />
-        <button id="export">Export</button>
-        <div id="try"><select name="var1" id="var1"></select></div>
-      </div>
-    </div>
-    <div class="slider" id="slide">
-      <p id="textbar">
-        <label style="border: 0; background-color: #f30808; color: #593b35; font-weight: bold; text-align: center;"
-        for="amount">School Year:</label>
-        <input type="text" id="amount" readonly style="border: 0; color: #593b35; font-weight: bold; text-align: center;"/>
-          
       </p>
-      <div class="bar">
-        <div class="slidebar" id="slider"></div>
-        
-        
-      
-       
 
+      <p id="subtitle">Status of Schools between 2004 and 2014</p>
+      <div id="work">
+        <select name="var2" id="var2">
+          <option value="05" selected="selected">Population Density</option>
+          <option value="06">Population</option>
+          <option value="07">Median Income</option>
+          <option value="08">Poverty Rate</option>
+          <option value="09">Unemployment Rate</option>
+          <option value="10">Median Age</option>
+          <option value="11">
+            Percent of Population with Bachelor's Degree or Higher
+          </option>
+          <option value="12">
+            Percent of Population with High School Diploma or Higher
+          </option>
+          <option value="13">
+            Percent of Population with Less than High School Diploma
+          </option>
+          <option value="14">
+            Percent of Population with Less than Bachelor's Degree
+          </option>
+        </select>
       </div>
+      <br />
+      <div id="try"><select name="var1" id="var1"></select></div>
+      <div id="scrollfield">
+        <table id="legend">
+          <tr>
+            <td>
+              <div style="width: 45px; height: 30px; border: 1px solid #fff; background-color: rgba(38, 92, 79, 0.7);"></div>
+            </td>
+            <td>
+              <input type="text" id="leg7" readonly style="
+                    border: 0;
+                    background-color: #f6f6f6;
+                    color: #696969;
+                    width: 100px;
+                  " />
+            </td>
+          </tr>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <div
+              style="
+                width: 45px;
+                height: 30px;
+                border: 1px solid #fff;
+                background-color: rgba(62, 114, 101, 0.7);
+              "
+            ></div>
+          </td>
+          <td>
+            <input
+              type="text"
+              id="leg6"
+              readonly
+              style="
+                border: 0;
+                background-color: #f6f6f6;
+                color: #696969;
+                width: 100px;
+              "
+            />
+          </td>
+
+        </table>
+      </div>
+
+      <input type="file" id="upload" name="file" />
+      <br />
+      <div id="table"></div>
+
+      <br />
+      <button id="export">Export</button>
+      <br />
+      <button id="convert">convert</button>
     </div>
-   
-   
+  </div>
+  <div class="slider" id="slide">
+    <p id="textbar">
+      <label style="
+            border: 0;
+            background-color: #f30808;
+            color: #593b35;
+            font-weight: bold;
+            text-align: center;
+          " for="amount">School Year:</label>
+      <input type="text" id="amount" readonly style="
+            border: 0;
+            color: #593b35;
+            font-weight: bold;
+            text-align: center;
+          " />
+    </p>
+    <div class="bar">
+      <div class="slidebar" id="slider"></div>
+    </div>
+  </div>
 </body>
-
-
 
 <script src="js/main.js"></script>
 <script src="js/county.js"></script>

@@ -41,9 +41,15 @@ window.onload = function () {
   $(function(){
     $("#var1").selectmenu({
       change: function (event, ui) {
-        
-
+        selected = $("#var1").val(); //get selected value
         layerHandler();
+        $("#leg7").val(
+          Math.random()*100 + "%"
+        );
+        $("#leg6").val(
+          Math.random()*100 + "%"
+        );
+
       },
     })
   });
@@ -221,85 +227,67 @@ window.onload = function () {
         "<strong> Population: </strong>" +
         getSize(feature.properties.D02)
     );
+  
   }
 
   function onEachFeature1(feature, layer) {
    
+
     // create popup
     layer.bindPopup(
       "<strong> County Name: </strong>" +
         feature.properties.NAME +
         "<br />" +
         "<strong> Population: </strong>" +
-        getSize(feature.properties.D02)
+        feature.properties.CENSUSAREA
     );
     //layer on click add the data from that county to the table
     layer.on("click", function (e) {
       var layer = e.target;
       var county = layer.feature.properties.NAME;
-      var population = layer.feature.properties.CENSUSAREA;
+      var area = layer.feature.properties.CENSUSAREA;
       //add the data to the table
       $("#table").append(
         "<tr><td>" +
           county +
           "</td><td>" +
-          population +
+          area +
           "</td></tr>"
       );
-      //add the data to the table and export it to csv
-    });
-   
-    //make a geojson layer of the clicked county and save it
-    layer.on("click", function (e) {
-      var layer = e.target;
-      var county = layer.feature.properties.NAME;
-      var population = layer.feature.properties.CENSUSAREA;
-      //add the data to the table
-      $("#table").append(
-        "<tr><td>" +
-          county +
-          "</td><td>" +
-          population +
-          "</td></tr>"
-      );
-      //add the data to the table and export it to csv
-
-      //download geojson  
-
-      
-
-      var geojson = L.geoJson(layer.feature, {
-        onEachFeature: onEachFeature,
-      });
-      geojson.addTo(map);
-      geojson.toGeoJSON();
-      //var data = geojson.toGeoJSON();
-      $("#export").click(function () {
+     
+      //export multiple layer to geojson on click
+      $('#export').click(function(){
         var data = JSON.stringify(layer.toGeoJSON());
-        var blob = new Blob([data], { type: "text/plain;charset=utf-8" });
-        saveAs(blob, "county.geojson");
-      });
-      //define saveAs function
-      function saveAs(blob, fileName) {
-        var link = document.createElement("a");
-        link.href = window.URL.createObjectURL(blob);
-        link.download = fileName;
-        link.click();
-      }
-      
+        var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, "data.geojson");
 
      
 
+
     });
+   
+
+
+   //export the name and census area to txt file
+    $('#convert').click(function(){
+      var data = JSON.stringify(layer.feature.properties.NAME + " "+ layer.feature.properties.CENSUSAREA);
+      var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
+      saveAs(blob, "data.txt");
+    });
+
+
+    //define saveAs function but wait for all the layer
+    function saveAs(blob, fileName) {
+      var link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = fileName;
+      link.click();
+    }
+
   
-
-
-
-
+  });
 
   }
-
-
   var b = L.geoJson(county2, {
     pointToLayer: function (feature, latlng) {
       return L.circle(latlng, getSize1(feature.properties.D01), Cstyle(feature));
@@ -311,6 +299,7 @@ window.onload = function () {
   var c = L.geoJson(district, {
     style: style,
   });
+
 
 
   
@@ -437,25 +426,19 @@ window.onload = function () {
   $("#cover").css("display", "none");
 
 
-  //upload a file from the user's computer and add it to the map
-  $("#canvas").on("change", function (e) {
+//upload a file from the user's computer and add it to the map
+  $("#upload").on("change", function (e) {
     var file = e.target.files[0];
     var reader = new FileReader();
     reader.onload = function (e) {
-      var contents = e.target.result;
-      var geojson = JSON.parse(contents);
-      L.geoJson(geojson, {
+      var text = e.target.result;
+      L.geoJson(JSON.parse(text), {
         style: style,
         onEachFeature: onEachFeature1,
-      },
-      ).addTo(map);
+      }).addTo(map);
     };
     reader.readAsText(file);
   });
-
-
-
-
  
   
 
