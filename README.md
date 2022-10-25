@@ -16,6 +16,7 @@
 ### ![Capture](https://user-images.githubusercontent.com/38970123/197394475-3f010d08-5e07-4c87-9069-d7971d25a6b3.PNG)
 
 ## add echarts library to display the data in a chart
+### ![Capture](https://user-images.githubusercontent.com/38970123/197880043-e0d15d4f-f534-46e7-81ba-f4b07f99ef53.PNG)
 
 
 
