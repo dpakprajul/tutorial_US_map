@@ -237,24 +237,24 @@ window.onload = function () {
     // create popup
     layer.bindPopup(
       "<strong> County Name: </strong>" +
-        feature.properties.NAME +
+        feature.properties.NAME10 +
         "<br />" +
         "<strong> Population: </strong>" +
-        feature.properties.CENSUSAREA
+        feature.properties.D02
     );
     //layer on click add the data from that county to the table
     layer.on("click", function (e) {
       var layer = e.target;
-      var county = layer.feature.properties.NAME;
-      var area = layer.feature.properties.CENSUSAREA;
+      var county = layer.feature.properties.NAME10;
+      var area = layer.feature.properties.D02;
       //add the data to the table
-      $("#table").append(
-        "<tr><td>" +
-          county +
-          "</td><td>" +
-          area +
-          "</td></tr>"
-      );
+      // $("#table").append(
+      //   "<tr><td>" +
+      //     county +
+      //     "</td><td>" +
+      //     area +
+      //     "</td></tr>"
+      // );
      
       //export multiple layer to geojson on click
       $('#export').click(function(){
@@ -262,19 +262,89 @@ window.onload = function () {
         var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
         saveAs(blob, "data.geojson");
 
-     
+        //on click on the map layer send the geojson to another function
 
+      
 
     });
    
+    var data = JSON.stringify(layer.toGeoJSON());
+    var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
+    //sent the geojson to the display in echarts library
+    //handle multiple geojson
 
+    display(data);
 
    //export the name and census area to txt file
     $('#convert').click(function(){
-      var data = JSON.stringify(layer.feature.properties.NAME + " "+ layer.feature.properties.CENSUSAREA);
+      var data = JSON.stringify(layer.feature.properties.NAME10 + " "+ layer.feature.properties.D02);
       var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
       saveAs(blob, "data.txt");
     });
+
+    function display(data){
+      //display the data in the echarts library
+      var myChart = echarts.init(document.getElementById('main'));
+      //destringify the geojson
+      var data = JSON.parse(data);
+      var listItem = [];
+                  var item = data.properties.NAME10;
+                  var value = data.properties.D02;
+                  var item1 = data.properties.NAME10;
+                  var value1 = data.properties.D07;
+                  var item2 = data.properties.NAME10;
+                  var value2 = data.properties.D03;
+                  var item3 = data.properties.NAME10;
+                  var value3 = data.properties.D05;
+
+                  listItem.push({
+                      "firstName": item,
+                      "value": value
+                  })
+                  listItem.push({
+                    "firstName": item1,
+                    "value": value1
+                })
+                listItem.push({
+                  "firstName": item2,
+                  "value": value2
+              })
+              listItem.push({
+                "firstName": item3,
+                "value": value3
+            })           
+      var option = {
+        title: {
+          text: 'D01-D04',
+          subtext: 'GeoJSON in ECharts',
+          left: 'center'
+        },
+        tooltip: {
+          trigger: 'item'
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'left'
+        },
+        xAxis: {
+          type: 'category',
+          data: listItem.firstName
+      },
+      yAxis: {
+          type: 'value'
+      },
+      series: [{
+          // data: [data.features[i].properties.d_total, 200, 150, 80, 70, 110, 130],
+          data: listItem,
+          type: 'line',
+          showBackground: true,
+          backgroundStyle: {
+              color: 'rgba(180, 180, 180, 0.2)'
+          }
+      }]
+    };
+    myChart.setOption(option);
+    }
 
 
     //define saveAs function but wait for all the layer
