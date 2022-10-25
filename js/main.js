@@ -297,22 +297,23 @@ window.onload = function () {
                   var item3 = data.properties.NAME10;
                   var value3 = data.properties.D05;
 
-                  listItem.push({
-                      "firstName": item,
-                      "value": value
+                  listItem.push({  
+                    "value": value,
+                    "name": item  
                   })
                   listItem.push({
-                    "firstName": item1,
-                    "value": value1
-                })
-                listItem.push({
-                  "firstName": item2,
-                  "value": value2
-              })
-              listItem.push({
-                "firstName": item3,
-                "value": value3
-            })           
+                    "value": value1,
+                    "name": item1
+                  })
+                  listItem.push({
+                    "value": value2,
+                    "name": item2
+                  })
+                  listItem.push({
+                    "value": value3,
+                    "name": item3
+                  })
+
       var option = {
         title: {
           text: 'D01-D04',
@@ -326,22 +327,22 @@ window.onload = function () {
           orient: 'vertical',
           left: 'left'
         },
-        xAxis: {
-          type: 'category',
-          data: listItem.firstName
-      },
-      yAxis: {
-          type: 'value'
-      },
+       
       series: [{
           // data: [data.features[i].properties.d_total, 200, 150, 80, 70, 110, 130],
+          name: listItem.name,
           data: listItem,
-          type: 'line',
-          showBackground: true,
-          backgroundStyle: {
-              color: 'rgba(180, 180, 180, 0.2)'
-          }
-      }]
+          type: 'pie',
+          radius: '50%',
+          
+      }],
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      }
     };
     myChart.setOption(option);
     }
