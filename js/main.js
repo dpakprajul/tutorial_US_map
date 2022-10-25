@@ -201,6 +201,7 @@ window.onload = function () {
   }
    var a = L.geoJson(county, {
      style: style,
+     onEachFeature: onEachFeature1,
    }).addTo(map);
 
    
@@ -228,6 +229,84 @@ window.onload = function () {
         "<strong> Population: </strong>" +
         getSize(feature.properties.D02)
     );
+    layer.on("click", function (e) {
+      var layer = e.target;
+      display(layer.toGeoJSON());});
+
+      $('#export').click(function(){
+        var data = JSON.stringify(layer.toGeoJSON());
+        var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, "data.geojson");
+      });
+
+      function display(data){
+        //display the data in the echarts library
+        var myChart = echarts.init(document.getElementById('main'));
+        var listItem = [];
+  
+        var item = data.properties.NAMELSAD10;
+        var value= data.properties.school10;
+        var item1 = data.properties.NAMELSAD10;
+        var value1= data.properties.school12;
+        var item2 = data.properties.NAMELSAD10;
+        var value2= data.properties.school09;
+        var item3 = data.properties.NAMELSAD10;
+        var value3= data.properties.school08;
+        var item4 = data.properties.NAMELSAD10;
+        var value4= data.properties.school07;
+  
+  
+        listItem.push({name: item, value: value});
+        listItem.push({name: item1 + "1", value: value1});
+        listItem.push({name: item2 + "2", value: value2});
+        listItem.push({name: item3 + "3", value: value3});
+        listItem.push({name: item4 + "4", value: value4});
+  
+  
+        var option = {
+          title: {
+            text: 'County Population',
+            subtext: 'Source: US Census',
+            left: 'center'
+          },
+          tooltip: {
+            trigger: 'item'
+          },
+          legend: {
+            orient: 'vertical',
+            left: 'left',
+          },
+          series: [{
+            data: listItem,
+            type: 'line',
+            radius: '50%',
+  
+          }],
+          xAxis: {
+            type: 'category',
+            data: ['2010', '2011', '2012', '2013', '2014']
+          },
+          yAxis: {
+            type: 'value'
+          },
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          }
+  
+        };
+        myChart.setOption(option);
+      }
+      function saveAs(blob, fileName) {
+        var link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.download = fileName;
+        link.click();
+      }
+    
   
   }
 
@@ -255,6 +334,9 @@ window.onload = function () {
       //     area +
       //     "</td></tr>"
       // );
+
+      //var data = JSON.stringify(layer.toGeoJSON());
+      display(layer.toGeoJSON());
      
       //export multiple layer to geojson on click
       $('#export').click(function(){
@@ -267,13 +349,68 @@ window.onload = function () {
       
 
     });
-   
-    var data = JSON.stringify(layer.toGeoJSON());
-    var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
-    //sent the geojson to the display in echarts library
-    //handle multiple geojson
+  
+    function display(data){
+      //display the data in the echarts library
+      var myChart = echarts.init(document.getElementById('main'));
+      var listItem = [];
 
-    display(data);
+      var item = data.properties.NAME10;
+      var value= data.properties.D02;
+      var item1 = data.properties.NAME10;
+      var value1= data.properties.D03;
+      var item2 = data.properties.NAME10;
+      var value2= data.properties.D05;
+      var item3 = data.properties.NAME10;
+      var value3= data.properties.D07;
+      var item4 = data.properties.NAME10;
+      var value4= data.properties.D09;
+
+
+      listItem.push({name: item, value: value});
+      listItem.push({name: item1 + "1", value: value1});
+      listItem.push({name: item2 + "2", value: value2});
+      listItem.push({name: item3 + "3", value: value3});
+      listItem.push({name: item4 + "4", value: value4});
+
+
+      var option = {
+        title: {
+          text: 'County Population',
+          subtext: 'Source: US Census',
+          left: 'center'
+        },
+        tooltip: {
+          trigger: 'item'
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'left',
+        },
+        series: [{
+          data: listItem,
+          type: 'line',
+          radius: '50%',
+
+        }],
+        xAxis: {
+          type: 'category',
+          data: ['2010', '2011', '2012', '2013', '2014']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        }
+
+      };
+      myChart.setOption(option);
+    }
 
    //export the name and census area to txt file
     $('#convert').click(function(){
@@ -282,70 +419,7 @@ window.onload = function () {
       saveAs(blob, "data.txt");
     });
 
-    function display(data){
-      //display the data in the echarts library
-      var myChart = echarts.init(document.getElementById('main'));
-      //destringify the geojson
-      var data = JSON.parse(data);
-      var listItem = [];
-                  var item = data.properties.NAME10;
-                  var value = data.properties.D02;
-                  var item1 = data.properties.NAME10;
-                  var value1 = data.properties.D07;
-                  var item2 = data.properties.NAME10;
-                  var value2 = data.properties.D03;
-                  var item3 = data.properties.NAME10;
-                  var value3 = data.properties.D05;
-
-                  listItem.push({  
-                    "value": value,
-                    "name": item  
-                  })
-                  listItem.push({
-                    "value": value1,
-                    "name": item1
-                  })
-                  listItem.push({
-                    "value": value2,
-                    "name": item2
-                  })
-                  listItem.push({
-                    "value": value3,
-                    "name": item3
-                  })
-
-      var option = {
-        title: {
-          text: 'D01-D04',
-          subtext: 'GeoJSON in ECharts',
-          left: 'center'
-        },
-        tooltip: {
-          trigger: 'item'
-        },
-        legend: {
-          orient: 'vertical',
-          left: 'left'
-        },
-       
-      series: [{
-          // data: [data.features[i].properties.d_total, 200, 150, 80, 70, 110, 130],
-          name: listItem.name,
-          data: listItem,
-          type: 'pie',
-          radius: '50%',
-          
-      }],
-      emphasis: {
-        itemStyle: {
-          shadowBlur: 10,
-          shadowOffsetX: 0,
-          shadowColor: 'rgba(0, 0, 0, 0.5)'
-        }
-      }
-    };
-    myChart.setOption(option);
-    }
+    
 
 
     //define saveAs function but wait for all the layer
@@ -370,6 +444,7 @@ window.onload = function () {
 
   var c = L.geoJson(district, {
     style: style,
+    onEachFeature: onEachFeature1,
   });
 
 
