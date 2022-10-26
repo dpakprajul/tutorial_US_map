@@ -366,9 +366,10 @@ window.onload = function () {
             radius: '50%',
 
           }],
+          encode: { x: 'name', y: 'score' },
           xAxis: {
             type: 'category',
-            data: data1[i]
+            data: data1.county
           },
           yAxis: {
             type: 'value'
@@ -724,46 +725,76 @@ window.onload = function () {
     writeResults(evt);
   });
 
-  function writeResults(results) {
-    document.getElementById('info').innerHTML = JSON.stringify(
-      {
-        area: results.area,
-        areaDisplay: results.areaDisplay,
-        lastCoord: results.lastCoord,
-        length: results.length,
-        lengthDisplay: results.lengthDisplay,
-        pointCount: results.pointCount,
-        points: results.points
-      },
-      null,
-      2
-    );
-    //save the results to a file
-    var data = JSON.stringify({
-      area: results.area,
-      areaDisplay: results.areaDisplay,
-      lastCoord: results.lastCoord,
-      length: results.length,
-      lengthDisplay: results.lengthDisplay,
-      pointCount: results.pointCount,
-      points: results.points
-    },
-    null,
-    2);
-    var blob = new Blob([data], { type: "text/plain;charset=utf-8" });
-    saveAs(blob, "results.json");
+  // function writeResults(results) {
+  //   document.getElementById('info').innerHTML = JSON.stringify(
+  //     {
+  //       area: results.area,
+  //       areaDisplay: results.areaDisplay,
+  //       lastCoord: results.lastCoord,
+  //       length: results.length,
+  //       lengthDisplay: results.lengthDisplay,
+  //       pointCount: results.pointCount,
+  //       points: results.points
+  //     },
+  //     null,
+  //     2
+  //   );
 
-    function saveAs(blob, fileName) {
+//function writeResults to make a geojson from the clicked coordinates
+function writeResults(results) {
+  var geojson = {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        properties: {},
+        geometry: {
+          type: "Polygon",
+          //just take the coordinate values from the results without lat and ln
+          //take the key values from the results.points and store values in an array
+          coordinates: [
+            results.points.map(function (point) {
+              return [point.lng, point.lat];
+            })
+          ]
+        },
+      },
+    ],
+  };
+  var geojsonStr = JSON.stringify(geojson);
+  var blob = new Blob([geojsonStr], {type: "text/plain;charset=utf-8"});
+  console.log(geojsonStr);
+  document.getElementById("info").innerHTML = geojsonStr;
+  saveAs(blob, "geojson.geojson");
+}
+//save geojsonStr to file
+
+  
+
+
+
+
+    //save the results to a file
+    // var data = JSON.stringify({
+    //   area: results.area,
+    //   areaDisplay: results.areaDisplay,
+    //   lastCoord: results.lastCoord,
+    //   length: results.length,
+    //   lengthDisplay: results.lengthDisplay,
+    //   pointCount: results.pointCount,
+    //   points: results.points
+    // },
+    // null,
+    // 2);
+    // var blob = new Blob([data], { type: "text/plain;charset=utf-8" });
+    // saveAs(blob, "results.json");
+
+    function saveAs(geojsonStr, fileName) {
       var link = document.createElement("a");
-      link.href = window.URL.createObjectURL(blob);
+      link.href = window.URL.createObjectURL(geojsonStr);
       link.download = fileName;
       link.click();
     }
-
-  }
-
-
-
 
 
 };
