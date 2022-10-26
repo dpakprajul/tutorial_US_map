@@ -231,7 +231,9 @@ window.onload = function () {
     );
     layer.on("click", function (e) {
       var layer = e.target;
-      display(layer.toGeoJSON());});
+      //display(layer.toGeoJSON());
+    }
+      );
 
       $('#export').click(function(){
         var data = JSON.stringify(layer.toGeoJSON());
@@ -321,23 +323,74 @@ window.onload = function () {
         "<strong> Population: </strong>" +
         feature.properties.D02
     );
+    data1 = [];
     //layer on click add the data from that county to the table
     layer.on("click", function (e) {
       var layer = e.target;
       var county = layer.feature.properties.NAME10;
       var area = layer.feature.properties.D02;
       //add the data to the table
-      // $("#table").append(
+      //  $("#table").append(
       //   "<tr><td>" +
-      //     county +
-      //     "</td><td>" +
-      //     area +
-      //     "</td></tr>"
-      // );
+      //      county +
+      //      "</td><td>" +
+      //      area +
+      //      "</td></tr>"
+      //  );
+       //append county and area data to the data1 array
+        data1.push({county: county, area: area});
+        //display the data in the echarts library
+        var myChart = echarts.init(document.getElementById('main'));
+        var listItem = [];
+        for (var i = 0; i < data1.length; i++) {
+          var item = data1[i].county;
+          var value= data1[i].area;
+          listItem.push({name: item, value: value});
+        }
+        var option = {
+          title: {
+            text: 'County Population',
+            subtext: 'Source: US Census',
+            left: 'center'
+          },
+          tooltip: {
+            trigger: 'item'
+          },
+          legend: {
+            orient: 'vertical',
+            left: 'left',
+          },
+          series: [{
+            data: listItem,
+            type: 'line',
+            radius: '50%',
+
+          }],
+          xAxis: {
+            type: 'category',
+            data: data1[i]
+          },
+          yAxis: {
+            type: 'value'
+          },
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          }
+
+        };
+        myChart.setOption(option);
+
+
 
       //var data = JSON.stringify(layer.toGeoJSON());
-      display(layer.toGeoJSON());
-     
+      //display(layer.toGeoJSON());
+    
+
+
       //export multiple layer to geojson on click
       $('#export').click(function(){
         var data = JSON.stringify(layer.toGeoJSON());
@@ -349,7 +402,7 @@ window.onload = function () {
       
 
     });
-  
+ 
     function display(data){
       //display the data in the echarts library
       var myChart = echarts.init(document.getElementById('main'));
