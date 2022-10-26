@@ -633,12 +633,21 @@ window.onload = function () {
     var reader = new FileReader();
     reader.onload = function (e) {
       var text = e.target.result;
-      L.geoJson(JSON.parse(text), {
+      upload = L.geoJson(JSON.parse(text), {
         style: style,
         onEachFeature: onEachFeature1,
       }).addTo(map);
     };
     reader.readAsText(file);
+    //create a function to remove the upload data as well as reader file
+    $("#remove").on("click", function () {
+      map.removeLayer(upload);
+      //remove text
+      $("#upload").val("");
+    }
+    );
+
+
   });
   options = {
     position: 'topleft',            // Position to show the control. Values: 'topright', 'topleft', 'bottomright', 'bottomleft'
