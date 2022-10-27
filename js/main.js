@@ -21,6 +21,26 @@ window.onload = function () {
 
   L.control.scale().addTo(map);
 
+
+
+//jquery to get the location of the user when locator buttom is clicked
+$("#locator").click(function () {
+  map.locate({ setView: true, maxZoom: 10 });
+});
+//show the radius of the location
+function onLocationFound(e) {
+  var radius = e.accuracy / 2;
+
+  L.marker(e.latlng)  //marker
+    .addTo(map)
+    .bindPopup("You are within " + radius + " meters from this point")  
+    .openPopup();
+
+  L.circle(e.latlng, radius).addTo(map);  //circle
+}
+map.on("locationfound", onLocationFound);
+
+
   var circle = "PT";
   var year = "04";
   var schFill = "PT04";
@@ -644,6 +664,8 @@ window.onload = function () {
       map.removeLayer(upload);
       //remove text
       $("#upload").val("");
+      //remove info
+      $("#info").html("");
     }
     );
 
@@ -729,11 +751,21 @@ window.onload = function () {
     },
 };
   L.control.polylineMeasure(options).addTo(map);
-
   map.on('measurefinish', function(evt) {
     writeResults(evt);
+    $("#remove").on("click", function (evt) {
+      //remove layer using target
+      map.removeLayer(evt.target);
+      //remove text
+
+      
+     
+    $("#info").html("");
+  } );
+
   });
 
+  
   // function writeResults(results) {
   //   document.getElementById('info').innerHTML = JSON.stringify(
   //     {
@@ -757,7 +789,9 @@ function writeResults(results) {
       {
         type: "Feature",
         properties: {},
+        //create a geometry and type in accordance with the choosen coordinates
         geometry: {
+          //choose type as polygon, line or point depending on the coordinates
           type: "Polygon",
           //just take the coordinate values from the results without lat and ln
           //take the key values from the results.points and store values in an array

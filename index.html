@@ -9,6 +9,7 @@
       type="text/css"
       href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css"
     />
+    <link rel="stylesheet" href="dist/font-awesome-4.7.0/css/font-awesome.css" />
    
     <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script
@@ -32,7 +33,9 @@
     <title>Document</title>
 </head>
 <body>
+  <button type="button" id="locator"><i class="fa fa-map-marker" aria-hidden="true"></i></button>
     <div id="base">
+      
       <div class="dropdown">
         <p id="maptitle">Map of USA <br/>
         <input type="text" id="admin" readonly />
@@ -124,6 +127,7 @@
 <script src="js/district.js"></script>
 <script src="dist/leaflet-measure.js"></script>
 <script src="dist/echarts.js"></script>
+
 
 
 </html>
