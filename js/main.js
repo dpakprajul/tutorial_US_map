@@ -27,18 +27,7 @@ window.onload = function () {
 $("#locator").click(function () {
   map.locate({ setView: true, maxZoom: 10 });
 });
-//show the radius of the location
-function onLocationFound(e) {
-  var radius = e.accuracy / 2;
 
-  L.marker(e.latlng)  //marker
-    .addTo(map)
-    .bindPopup("You are within " + radius + " meters from this point")  
-    .openPopup();
-
-  L.circle(e.latlng, radius).addTo(map);  //circle
-}
-map.on("locationfound", onLocationFound);
 
 
   var circle = "PT";
@@ -671,6 +660,10 @@ map.on("locationfound", onLocationFound);
 
 
   });
+  L.simpleMapScreenshoter().addTo(map);
+  L.control.locate().addTo(map);
+  L.control.scale().addTo(map);
+  L.control.mousePosition().addTo(map);
   options = {
     position: 'topleft',            // Position to show the control. Values: 'topright', 'topleft', 'bottomright', 'bottomleft'
     unit: 'kilometres',             // Default unit the distances are displayed in. Values: 'kilometres', 'landmiles', 'nauticalmiles'
