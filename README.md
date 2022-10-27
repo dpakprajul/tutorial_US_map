@@ -18,6 +18,8 @@
 ## add echarts library to display the data in a chart
 ### ![Capture](https://user-images.githubusercontent.com/38970123/197880043-e0d15d4f-f534-46e7-81ba-f4b07f99ef53.PNG)
 
+## geolocation and screenshot to geolocate and make a map screenshots
+### ![Capture](https://user-images.githubusercontent.com/38970123/198255113-b679f115-0791-443b-a920-5a202c06bd44.PNG)
 
 
 
