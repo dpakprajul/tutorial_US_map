@@ -10,12 +10,14 @@
       href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css"
     />
     <link rel="stylesheet" href="dist/font-awesome-4.7.0/css/font-awesome.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@[VERSION]/dist/L.Control.Locate.min.css" />
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@[VERSION]/dist/L.Control.Locate.min.css" /> -->
     <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script
     type="text/javascript"
     src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js?2"
   ></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css" integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js" integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg=" crossorigin=""></script>
  <link
  rel="stylesheet"
  href="http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"
@@ -31,89 +33,86 @@
 
   
 <link rel="stylesheet" href="css/style.css">
-    <title>Document</title>
+    <title>Leaflet map of USA</title>
 </head>
 <body>
+  <div id="base">
+  </div>
+  <div class="dropdown">
+    
+    <p id="maptitle">Map of USA <br/>
+    <input type="text" id="admin" readonly />
+    </p>
 
-    <div id="base">
-      
-      <div class="dropdown">
-        <p id="maptitle">Map of USA <br/>
-        <input type="text" id="admin" readonly />
-        </p>
+    <p id="subtitle">Status of Schools between 2004 and 2014</p>
+    <div id="work">
+      <select name="var2" id="var2">
+        <option value="05" selected="selected">Population Density</option>
+        <option value="06">Population</option>
+        <option value="07">Median Income</option>
+        <option value="08">Poverty Rate</option>
+        <option value="09">Unemployment Rate</option>
+        <option value="10">Median Age</option>
+        <option value="11">Percent of Population with Bachelor's Degree or Higher</option>
+        <option value="12">Percent of Population with High School Diploma or Higher</option>
+        <option value="13">Percent of Population with Less than High School Diploma</option>
+        <option value="14">Percent of Population with Less than Bachelor's Degree</option>
 
-        <p id="subtitle">Status of Schools between 2004 and 2014</p>
-        <div id="work">
-          <select name="var2" id="var2">
-            <option value="05" selected="selected">Population Density</option>
-            <option value="06">Population</option>
-            <option value="07">Median Income</option>
-            <option value="08">Poverty Rate</option>
-            <option value="09">Unemployment Rate</option>
-            <option value="10">Median Age</option>
-            <option value="11">Percent of Population with Bachelor's Degree or Higher</option>
-            <option value="12">Percent of Population with High School Diploma or Higher</option>
-            <option value="13">Percent of Population with Less than High School Diploma</option>
-            <option value="14">Percent of Population with Less than Bachelor's Degree</option>
-
-          </select>
-        </div>
-        <br />
-        <input type="file" id="upload" name="file" />
-        <button id="remove">Remove</button>
-        <br />
-        <div id="table"></div>
-
-        <div id="try"><select name="var1" id="var1"></select></div>
-
-      <br />
-
-      <div id="scrollfield">
-        <table id="legend">
-          <tr>
-            <td>
-              <div style="width: 45px; height: 30px; border: 1px solid #fff; background-color: #012207"></div>
-            </td>
-            <td><input type="text" id="leg6" readonly style="border: 0; background-color: #f6f6f6; color: #696969; width: 100px"/></td>
-          </tr>
-          <tr>
-            <td>
-              <div style="width: 45px; height: 30px; border: 1px solid #fff; background-color: #097103"></div>
-            </td>
-            <td><input type="text" id="leg7" readonly style="border: 0; background-color: #f6f6f6; color: #696969; width: 100px"/></td>
-          </tr>
-          <tr>
-            <td>
-              <div style="width: 45px; height: 30px; border: 1px solid #fff; background-color: #10bf27"></div>
-            </td>
-            <td><input type="text" id="leg8" readonly style="border: 0; background-color: #f6f6f6; color: #696969; width: 100px"/></td>
-          </tr>
-        </table>
-      </div>
-      <button id="export">Export</button>
-      <br />
-      <button id="convert">convert</button>
-      <div id="info"></div>
-      <div id="main" style="width: 500px; height: 280px"></div>
-      
-      </div>
+      </select>
     </div>
-    <div class="slider" id="slide">
-      <p id="textbar">
-        <label style="border: 0; background-color: #f30808; color: #593b35; font-weight: bold; text-align: center;"
-        for="amount">School Year:</label>
-        <input type="text" id="amount" readonly style="border: 0; color: #593b35; font-weight: bold; text-align: center;"/>
-          
-      </p>
-      <div class="bar">
-        <div class="slidebar" id="slider"></div>
-        
-        
-      
-       
+    <br />
+    <input type="file" id="upload" name="file" />
+    <button id="remove">Remove</button>
+    <br />
+    <div id="table"></div>
 
-      </div>
-    </div>
+    <div id="try"><select name="var1" id="var1"></select></div>
+
+  <br />
+
+  <div id="scrollfield">
+    <table id="legend">
+      <tr>
+        <td>
+          <div style="width: 45px; height: 30px; border: 1px solid #fff; background-color: #012207"></div>
+        </td>
+        <td><input type="text" id="leg6" readonly style="border: 0; background-color: #f6f6f6; color: #696969; width: 100px"/></td>
+      </tr>
+      <tr>
+        <td>
+          <div style="width: 45px; height: 30px; border: 1px solid #fff; background-color: #097103"></div>
+        </td>
+        <td><input type="text" id="leg7" readonly style="border: 0; background-color: #f6f6f6; color: #696969; width: 100px"/></td>
+      </tr>
+      <tr>
+        <td>
+          <div style="width: 45px; height: 30px; border: 1px solid #fff; background-color: #10bf27"></div>
+        </td>
+        <td><input type="text" id="leg8" readonly style="border: 0; background-color: #f6f6f6; color: #696969; width: 100px"/></td>
+      </tr>
+    </table>
+  </div>
+  <button id="export">Export</button>
+  <br />
+  <button id="convert">convert</button>
+  <div id="info"></div>
+  <div id="main" style="width: 500px; height: 280px"></div>
+  
+  </div>
+</div>
+<div class="slider" id="slide">
+  <p id="textbar">
+    <label style="border: 0; background-color: #f30808; color: #593b35; font-weight: bold; text-align: center;"
+    for="amount">School Year:</label>
+    <input type="text" id="amount" readonly style="border: 0; color: #593b35; font-weight: bold; text-align: center;"/>
+      
+  </p>
+  <div class="bar">
+    <div class="slidebar" id="slider"></div>
+  
+
+  </div>
+    
    
    
 </body>
@@ -131,8 +130,9 @@
 <script src="https://unpkg.com/leaflet"></script>
 <script src="https://unpkg.com/leaflet-simple-map-screenshoter"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.70/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.70/dist/L.Control.Locate.min.js" charset="utf-8"></script> -->
 <script src="dist/L.Control.MousePosition.js"></script>
+<script src="dist/leaflet.browser.print.min.js"></script>
 
 
 </html>

@@ -13,13 +13,19 @@ window.onload = function () {
   });
 
   //basemap definition
-  L.tileLayer("http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png", {
+  var osm = L.tileLayer("http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png", {
     attribution:
       '&copy; <a href="http://osm.org/copyright" title="OpenStreetMap" target="_blank">OpenStreetMap</a> contributors | <a href="http://cartodb.com/attributions" title="CartoDB" target="_blank">CartoDB</a>',
     subdomains: ["a", "b", "c", "d", "e", "f"],
   }).addTo(map); //add to map
 
+  var stamen = L.tileLayer('http://tile.stamen.com/toner/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.'
+}).addTo(map);
+
   L.control.scale().addTo(map);
+  L.control.browserPrint({title: 'Webmap of USA'}).addTo(map);
 
 
 
@@ -238,17 +244,23 @@ $("#locator").click(function () {
         "<strong> Population: </strong>" +
         getSize(feature.properties.D02)
     );
+    //enable multiple selection using timeout function
+   
+
+//use timeout function to enable multiple selection
+
+    setTimeout(function() {
     layer.on("click", function (e) {
       var layer = e.target;
-      //display(layer.toGeoJSON());
-    }
-      );
-
+      //highlight the selected county
+      display(layer.toGeoJSON());
       $('#export').click(function(){
         var data = JSON.stringify(layer.toGeoJSON());
         var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
         saveAs(blob, "data.geojson");
       });
+    });
+  }, 1000);
 
       function display(data){
         //display the data in the echarts library
@@ -321,6 +333,8 @@ $("#locator").click(function () {
   
   }
 
+
+
   function onEachFeature1(feature, layer) {
    
 
@@ -332,6 +346,20 @@ $("#locator").click(function () {
         "<strong> Population: </strong>" +
         feature.properties.D02
     );
+    //enable multiple selection using timeout function and highlight the selected county
+    setTimeout(function() {
+      layer.on("click", function (e) {
+        var layer = e.target;
+        //highlight the selected county using highlightFeature function
+        highlightFeature(e);
+        $('#export').click(function(){
+          var data = JSON.stringify(layer.toGeoJSON());
+          var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
+          saveAs(blob, "data.geojson");
+        });
+      });
+    }, 1000);
+
     data1 = [];
     //layer on click add the data from that county to the table
     layer.on("click", function (e) {
@@ -402,16 +430,37 @@ $("#locator").click(function () {
 
 
       //export multiple layer to geojson on click
-      $('#export').click(function(){
-        var data = JSON.stringify(layer.toGeoJSON());
-        var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
-        saveAs(blob, "data.geojson");
+    //   $('#export').click(function(){
+    //     var data = JSON.stringify(layer.toGeoJSON());
+    //     var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
+    //     saveAs(blob, "data.geojson");
 
-        //on click on the map layer send the geojson to another function
+    //     //on click on the map layer send the geojson to another function
+    // });
 
-      
+    // //set timeout to allow the user to select multiple counties
+    // setTimeout(function(){
+    //   //on click of the export button send the data to the export function
+    //   $('#export').click(function(){
+    //     //call the export function
+    //     exportData(data1);
+    //   });
+    // }, 1000);
+    
+    // function exportData(data1){
+    //   //export the data to a csv file
+    //   var csv = Papa.unparse(data1);
+    //   var blob = new Blob([csv], {type: "text/plain;charset=utf-8"});
+    //   saveAs(blob, "data.csv");
+    // }
+    // function saveAs(blob, fileName) {
+    //   var link = document.createElement("a");
+    //   link.href = window.URL.createObjectURL(blob);
+    //   link.download = fileName;
+    //   link.click();
+    // }
+  
 
-    });
  
     function display(data){
       //display the data in the echarts library
@@ -661,9 +710,9 @@ $("#locator").click(function () {
 
   });
   L.simpleMapScreenshoter().addTo(map);
-  L.control.locate().addTo(map);
-  L.control.scale().addTo(map);
-  L.control.mousePosition().addTo(map);
+  // L.control.locate().addTo(map);
+  // L.control.scale().addTo(map);
+  // L.control.mousePosition().addTo(map);
   options = {
     position: 'topleft',            // Position to show the control. Values: 'topright', 'topleft', 'bottomright', 'bottomleft'
     unit: 'kilometres',             // Default unit the distances are displayed in. Values: 'kilometres', 'landmiles', 'nauticalmiles'
@@ -743,20 +792,20 @@ $("#locator").click(function () {
         radius: 3                   // Radius of the circle
     },
 };
-  L.control.polylineMeasure(options).addTo(map);
-  map.on('measurefinish', function(evt) {
-    writeResults(evt);
-    $("#remove").on("click", function (evt) {
-      //remove layer using target
-      map.removeLayer(evt.target);
-      //remove text
+  // L.control.polylineMeasure(options).addTo(map);
+  // map.on('measurefinish', function(evt) {
+  //   writeResults(evt);
+  //   $("#remove").on("click", function (evt) {
+  //     //remove layer using target
+  //     map.removeLayer(evt.target);
+  //     //remove text
 
       
      
-    $("#info").html("");
-  } );
+  //   $("#info").html("");
+  // } );
 
-  });
+  // });
 
   
   // function writeResults(results) {
@@ -806,7 +855,10 @@ function writeResults(results) {
 //save geojsonStr to file
 
   
-
+L.control.layers({
+  'Stamen': stamen,
+  'OSM': osm,
+}).addTo(map);
 
 
 

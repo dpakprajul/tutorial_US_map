@@ -10,13 +10,14 @@ html, body{
 
 
 #base{
-	position: absolute;
+	position: relative;
 	left: 100px;
 	right: 100px;
 	height: 100%;
 	border-left: 1px solid 63875e;
 	border-right: 1px solid 63875e;
 	overflow: hidden;
+	z-index: 1;
 }
 
 #slider label {
@@ -46,9 +47,9 @@ html, body{
 	position: absolute;
 	right: 20px;
 	bottom: 20px;
-	width: 35%;
+	width: 30%;
 	top: 20px;
-	z-index: 2;
+	z-index: 4;
 	background-color: #f6f6f6;
 	border: 1px solid 63875e;
 }
