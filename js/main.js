@@ -19,10 +19,10 @@ window.onload = function () {
     subdomains: ["a", "b", "c", "d", "e", "f"],
   }).addTo(map); //add to map
 
-  var stamen = L.tileLayer('http://tile.stamen.com/toner/{z}/{x}/{y}.png', {
-    maxZoom: 18,
-    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.'
-}).addTo(map);
+//   var stamen = L.tileLayer('http://tile.stamen.com/toner/{z}/{x}/{y}.png', {
+//     maxZoom: 18,
+//     attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.'
+// }).addTo(map);
 
   L.control.scale().addTo(map);
   L.control.browserPrint({title: 'Webmap of USA'}).addTo(map);
@@ -214,12 +214,59 @@ $("#locator").click(function () {
       fillOpacity: 1,
     };
   }
+  //for debugging removed
    var a = L.geoJson(county, {
      style: style,
      onEachFeature: onEachFeature1,
-   }).addTo(map);
+   })
 
-   
+   //add vt layer
+  //  var options = {
+  //   maxZoom: 24,
+  //   tolerance: 3,
+  //   debug: 0,
+  //   style: {
+  //     fillColor: "red",
+  //     color: "blue",
+  //   },
+  //   //add onEachFeature function
+  //   onEachFeature: onEachFeature1,
+    
+  //  };
+
+  //  var vtLayer = L.geoJson.vt(vt_layer, options).addTo(map);
+
+   //use vectorgrid to add vt layer
+    var options2 = {
+    maxZoom: 24,
+    tolerance: 3,
+    debug: 0,
+    style: {
+      color: "blue",
+      
+    }};
+    var vtLayer2 = L.vectorGrid.slicer(vt_layer, options2).addTo(map);
+
+    var groupOfNonGroup = L.layerGroup();
+
+function copyToGroupOfNonGroup(group) {
+  group.eachLayer(function (layer) {
+    if (layer instanceof L.LayerGroup) {
+      copyToGroupOfNonGroup(layer);
+    } else {
+      layer.addTo(groupOfNonGroup);
+    }
+  });
+}
+
+copyToGroupOfNonGroup(a);
+
+var results = leafletPip.pointInLayer([-92.8399658203125,40.46784549077255], groupOfNonGroup);
+console.log(results);
+
+
+
+
   
   function highlightFeature(e) {
     var layer = e.target;
@@ -856,10 +903,11 @@ function writeResults(results) {
 
   
 L.control.layers({
-  'Stamen': stamen,
+  //'Stamen': stamen,
   'OSM': osm,
 }).addTo(map);
 
+//convert the 
 
 
     //save the results to a file
