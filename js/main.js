@@ -215,54 +215,216 @@ $("#locator").click(function () {
     };
   }
   //for debugging removed
-   var a = L.geoJson(county, {
-     style: style,
-     onEachFeature: onEachFeature1,
-   })
-
-   //add vt layer
-  //  var options = {
-  //   maxZoom: 24,
-  //   tolerance: 3,
-  //   debug: 0,
-  //   style: {
-  //     fillColor: "red",
-  //     color: "blue",
-  //   },
-  //   //add onEachFeature function
-  //   onEachFeature: onEachFeature1,
-    
-  //  };
-
-  //  var vtLayer = L.geoJson.vt(vt_layer, options).addTo(map);
+  //  var a = L.geoJson(county, {
+  //    style: style,
+  //    onEachFeature: onEachFeature1,
+  //  })
 
    //use vectorgrid to add vt layer
-    var options2 = {
-    maxZoom: 24,
-    tolerance: 3,
-    debug: 0,
-    style: {
-      color: "blue",
-      
-    }};
-    var vtLayer2 = L.vectorGrid.slicer(vt_layer, options2).addTo(map);
+   var highlight;
+		var clearHighlight = function() {
+			if (highlight) {
+				vtLayer2.resetFeatureStyle(highlight);
+			}
+			highlight = null;
+		};
+    var vtLayer2 = L.vectorGrid
+    .slicer(vt_layer,{
+      rendererFactory: L.svg.tile,
+      vectorTileLayerStyles: {
+        sliced: function(properties, zoom) {
+          var p = properties.D01;
+          return {
+            
+            fillColor: 
+            p<=3?"#ccffbb":
+            p <=10 ? '#800026' :
+              p <= 20  ? '#BD0026' :
+              p <= 30  ? '#E31A1C' :
+              p <= 40  ? '#FC4E2A' :
+              p <= 50   ? '#FD8D3C' :
+              p <= 60   ? '#FEB24C' :
+              p <= 70   ? '#FED976' :
+                p <=100 ? '#E31A1C' :
+                p<=120?'#800026':
+                p <=150 ? '#FEB24C' :
+                p <= 300 ? '#B2FE4C':
+                p <= 500 ? '#B2FE4C': 
+                p <= 1000 ? '#B2FE4C': 
+                p <=2000 ? '#B2FE4C' : '#FFEDA0',
 
-    var groupOfNonGroup = L.layerGroup();
+            fillOpacity: 0.5,
+             //fillOpacity: 1,
+            stroke: true,
+            fill: true,
+            color: 'black',
+               //opacity: 0.2,
+            weight: 0,
+          }
+        },
+      },
+      interactive: true,
+      getFeatureId: function(f) {
+        return f.properties.NAMELSAD10;
+      }
+     }).on('mouseover', function(e) {
+			var properties = e.layer.properties;
+			L.popup()
+				.setContent("County: " + e.layer.properties.NAMELSAD10 + "<br>White Student: " + e.layer.properties.D01 + "<br>White Teacher: " + e.layer.properties.D02)
+				.setLatLng(e.latlng)
+				.openOn(map);
 
-function copyToGroupOfNonGroup(group) {
-  group.eachLayer(function (layer) {
-    if (layer instanceof L.LayerGroup) {
-      copyToGroupOfNonGroup(layer);
-    } else {
-      layer.addTo(groupOfNonGroup);
-    }
-  });
-}
+			clearHighlight();
+			highlight = properties.NAMELSAD10;
 
-copyToGroupOfNonGroup(a);
+		var p = properties.D01;;
+			var style = {
+				fillColor: p === 0 ? '#800026' :
+        p<=3?"#ccffbb":
+        p <=10 ? '#800026' :
+          p <= 20  ? '#BD0026' :
+          p <= 30  ? '#E31A1C' :
+          p <= 40  ? '#FC4E2A' :
+          p <= 50   ? '#FD8D3C' :
+          p <= 60   ? '#FEB24C' :
+          p <= 70   ? '#FED976' :
+            p <=100 ? '#E31A1C' :
+            p<=120?'#800026':
+            p <=150 ? '#FEB24C' :
+            p <= 300 ? '#B2FE4C':
+            p <= 500 ? '#B2FE4C': 
+            p <= 1000 ? '#B2FE4C': 
+            p <=2000 ? '#B2FE4C' : '#FFEDA0',
+				fillOpacity: 0.5,
+				fillOpacity: 1,
+				stroke: true,
+				fill: true,
+				color: 'red',
+				opacity: 1,
+				weight: 2,
+			};
 
-var results = leafletPip.pointInLayer([-92.8399658203125,40.46784549077255], groupOfNonGroup);
-console.log(results);
+			vtLayer2.setFeatureStyle(properties.NAMELSAD10, style);
+		})
+		.addTo(map);
+    // map.on('click', clearHighlight);
+
+//settimeout function 
+  setTimeout(function () {
+    vtLayer2.on('click', function(e) {
+      var properties = e.layer.properties.NAMELSAD10;
+    
+			highlight = properties.NAMELSAD10;
+
+			var p = properties.D01;
+			var style = {
+				fillColor: p === 0 ? '#800026' :
+        p<=3?"#ccffbb":
+        p <=10 ? '#800026' :
+          p <= 20  ? '#BD0026' :
+          p <= 30  ? '#E31A1C' :
+          p <= 40  ? '#FC4E2A' :
+          p <= 50   ? '#FD8D3C' :
+          p <= 60   ? '#FEB24C' :
+          p <= 70   ? '#FED976' :
+            p <=100 ? '#E31A1C' :
+            p<=120?'#800026':
+            p <=150 ? '#FEB24C' :
+            p <= 300 ? '#B2FE4C':
+            p <= 500 ? '#B2FE4C': 
+            p <= 1000 ? '#B2FE4C': 
+            p <=2000 ? '#B2FE4C' : '#FFEDA0',
+				fillOpacity: 0.5,
+				fillOpacity: 1,
+				stroke: true,
+				fill: true,
+				color: 'red',
+				opacity: 1,
+				weight: 2,
+			};
+
+			vtLayer2.setFeatureStyle(properties.NAMELSAD10, style);
+     
+      //save as a text file when clicked on save
+      $("#save").click(function () {
+        var text = properties;
+        var filename = "county.txt";
+        //download as blob
+        var blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+        saveAs(blob, filename);
+      });
+
+    });
+  }, 3000);
+
+
+
+	
+
+    // //add popup on vectorgrid
+    // setTimeout(function() {
+    // vtLayer2.on('click', function(e) {
+    //   //save the selected county
+    //   var selected = e.layer.properties.NAMELSAD10;
+    //   //save as a txt file on clicking save function
+    //   $("#save").click(function() {
+    //     var text = selected;
+    //     var filename = "selected.txt";
+    //     //saveAs(text, filename);
+    //     var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+    //     saveAs(blob, filename);
+
+    //   });
+
+    //   var popup = L.popup()
+    //   //setLatLng to the center of polygon
+    //   .setLatLng(e.latlng)
+    //   .setContent("County: " + e.layer.properties.NAMELSAD10 + "<br>White Student: " + e.layer.properties.D01 + "<br>White Teacher: " + e.layer.properties.D02)
+    //   .openOn(map);
+    // });
+    // }, 1000);
+
+ 
+    //   layer.on("click", function (e) {
+    //     var layer = e.target;
+    //     //highlight the selected county
+    //     display(layer.toGeoJSON());
+    //     $('#export').click(function(){
+    //       var data = JSON.stringify(layer.toGeoJSON());
+    //       var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
+    //       saveAs(blob, "data.geojson");
+    //     });
+    //   });
+    // }, 1000);
+
+    // //add popup on geojson
+    // a.on('click', function(e) {
+    //   var popup = L.popup()
+    //   .setLatLng(e.latlng)
+    //   .setContent("County: " + e.layer.properties.name + "<br>White Student: " + e.layer.properties.whStu11 + "<br>White Teacher: " + e.layer.properties.whTea11)
+    //   .openOn(map);
+    // });
+
+
+//     var groupOfNonGroup = L.layerGroup();
+
+// function copyToGroupOfNonGroup(group) {
+//   group.eachLayer(function (layer) {
+//     if (layer instanceof L.LayerGroup) {
+//       copyToGroupOfNonGroup(layer);
+//     } else {
+//       layer.addTo(groupOfNonGroup);
+//     }
+//   });
+// }
+
+// copyToGroupOfNonGroup(a);
+
+// var m1 = L.marker([55.7936, 37.7902]).addTo(map);
+
+
+// var results1 = leafletPip.pointInLayer(m1.getLatLng(), groupOfNonGroup);
+// console.log(results1);
 
 
 
