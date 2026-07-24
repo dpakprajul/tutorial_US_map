@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Name — Personal Site</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --bg-alt: #171a21;
+    --text: #e8e8e8;
+    --muted: #9aa0a6;
+    --accent: #5eead4;
+    --accent-2: #a78bfa;
+    --border: #2a2e37;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", system-ui, sans-serif;
+    line-height: 1.6;
+  }
+
+  header {
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+    background: radial-gradient(circle at top, var(--bg-alt), var(--bg));
+    border-bottom: 1px solid var(--border);
+  }
+
+  header h1 {
+    font-size: 2.8rem;
+    letter-spacing: -0.5px;
+  }
+
+  header h1 span {
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  header p {
+    color: var(--muted);
+    margin-top: 0.75rem;
+    font-size: 1.1rem;
+  }
+
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+
+  nav a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+
+  section {
+    margin-bottom: 4rem;
+  }
+
+  section h2 {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    color: var(--accent);
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .card {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+  }
+
+  .card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .card p {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 2rem;
+  }
+
+  .tag {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  footer {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Hi, I'm <span>Your Name</span></h1>
+  <p>Building things at the intersection of maps, data, and code.</p>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#work">Work</a>
+    <a href="#skills">Skills</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <section id="about">
+    <h2>About Me</h2>
+    <p>
+      A short paragraph about who you are, what you do, and what drives you.
+      Talk about your background, your current role, and what kind of problems
+      you like solving. Keep it personal and conversational — this is the part
+      visitors read first.
+    </p>
+  </section>
+
+  <section id="work">
+    <h2>Selected Work</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>Project One</h3>
+        <p>A brief description of what this project does and why it matters.</p>
+      </div>
+      <div class="card">
+        <h3>Project Two</h3>
+        <p>Another project summary — keep each one short and punchy.</p>
+      </div>
+      <div class="card">
+        <h3>Project Three</h3>
+        <p>A third highlight, maybe something you're most proud of.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <h2>Skills & Tools</h2>
+    <div class="tags">
+      <span class="tag">GIS</span>
+      <span class="tag">JavaScript</span>
+      <span class="tag">Python</span>
+      <span class="tag">PHP</span>
+      <span class="tag">SQL</span>
+      <span class="tag">OpenLayers</span>
+      <span class="tag">Data Visualization</span>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Get in Touch</h2>
+    <p>
+      Feel free to reach out via
+      <a href="mailto:you@example.com" style="color: var(--accent);">email</a>
+      or connect on your favorite platform.
+    </p>
+  </section>
+</main>
+
+<footer>
+  © 2026 Your Name — Built with a bit of HTML and a little care.
+</footer>
+
+</body>
+</html>
